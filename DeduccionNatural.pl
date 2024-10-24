@@ -100,30 +100,44 @@ ejemploSupuesto :-
             'Supuesto'(s and !r)
           ]).
 ejemploMorganAnd :-
-     main( [ !(s and q)],
+    main( [ !(s and q)],
           !s or !q,
           [ 'Premisa'(1),
             'Morgan And a'(1)
           ]).
 ejemploMorganAndB :-
-     main( [ !s and !q],
+    main( [ !s and !q],
           !(s or q),
           [ 'Premisa'(1),
             'Morgan And b'(1)
           ]).
 
 ejemploMorganOr :-
-     main( [ !(s or q)],
+    main( [ !(s or q)],
           !s and !q,
           [ 'Premisa'(1),
             'Morgan Or a'(1)
           ]).
 
 ejemploMorganOrB :-
-     main( [ !s or !q],
+    main( [ !s or !q],
           !(s and q),
           [ 'Premisa'(1),
             'Morgan Or b'(1)
+          ]).
+ejemploCorteA :-
+    main([p or q, !p],
+          q,
+          [ 'Premisa'(1),
+            'Premisa'(2),
+            'Corte a'(1, 2)
+          ]).
+ejemploCorteB :-
+    main([p or q, !q],
+          p,
+          [ 'Premisa'(1),
+            'Premisa'(2),
+            'Corte b'(1, 2)
           ]).
 
 :- data counter/1, formula/2, tabular/1, closed/1, opened/1, check/1.
@@ -406,6 +420,39 @@ rule( 'Morgan Or b',
         'E' or (1, 11, 18),
         'I' --> (2, 19),
         'I' ! (20)
+      ]).
+
+rule( 'Corte a',
+      [ FA or FB, !FA],
+      FB,
+      [ 'Premisa'(1),
+        'Premisa'(2),
+        'Supuesto'(FA),
+        'I' and (3, 2),
+        'Supuesto'(!FB),
+        'I' --> (5, 4),
+        'I' ! (6),
+        'E' ! (7),
+        'I' --> (3, 8),
+        'Supuesto'(FB),
+        'I' --> (10, 10),
+        'E' or (1, 9, 11)
+      ]).
+rule( 'Corte b',
+      [FA or FB, !FB],
+      FA,
+      [ 'Premisa'(1),
+        'Premisa'(2),
+        'Supuesto'(FA),
+        'I' --> (3, 3),
+        'Supuesto'(FB),
+        'I' and (5, 2),
+        'Supuesto'(!FA),
+        'I' --> (7, 6),
+        'I' ! (8),
+        'E' ! (9),
+        'I' --> (5, 10),
+        'E' or (1, 4, 11)
       ]).
 % Auxiliary predicates
 last_opened(A) :-
