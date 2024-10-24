@@ -139,6 +139,13 @@ ejemploCorteB :-
             'Premisa'(2),
             'Corte b'(1, 2)
           ]).
+ejemploTransitividad :-
+    main([p --> q, q --> r],
+          p --> r,
+          [ 'Premisa'(1),
+            'Premisa'(2),
+            'Transitividad'(1, 2)
+          ]).
 
 :- data counter/1, formula/2, tabular/1, closed/1, opened/1, check/1.
 main(Hypotheses, Deduction, Proof) :-
@@ -453,6 +460,16 @@ rule( 'Corte b',
         'E' ! (9),
         'I' --> (5, 10),
         'E' or (1, 4, 11)
+      ]).
+rule( 'Transitividad',
+      [A --> B, B --> C],
+      A --> C,
+      [ 'Premisa'(1),
+        'Premisa'(2),
+        'Supuesto'(A),
+        'E' --> (1, 3),
+        'E' --> (2, 4),
+        'I' --> (3, 5)
       ]).
 % Auxiliary predicates
 last_opened(A) :-
