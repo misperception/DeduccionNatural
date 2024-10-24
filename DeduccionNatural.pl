@@ -103,13 +103,27 @@ ejemploMorganAnd :-
      main( [ !(s and q)],
           !s or !q,
           [ 'Premisa'(1),
-            'Morgan And'(1)
+            'Morgan And a'(1)
           ]).
+ejemploMorganAndB :-
+     main( [ !s and !q],
+          !(s or q),
+          [ 'Premisa'(1),
+            'Morgan And b'(1)
+          ]).
+
 ejemploMorganOr :-
      main( [ !(s or q)],
           !s and !q,
           [ 'Premisa'(1),
-            'Morgan Or'(1)
+            'Morgan Or a'(1)
+          ]).
+
+ejemploMorganOrB :-
+     main( [ !s or !q],
+          !(s and q),
+          [ 'Premisa'(1),
+            'Morgan Or b'(1)
           ]).
 
 :- data counter/1, formula/2, tabular/1, closed/1, opened/1, check/1.
@@ -298,18 +312,18 @@ rule( 'MT',
         'I' ! (6)
       ]).
 
-rule( 'Morgan And',
-      [ !(A and B) ],
-      !A or !B,
+rule( 'Morgan And a',
+      [ !(FA and FB) ],
+      !FA or !FB,
       [ 'Premisa'(1),
-        'Supuesto'(!(!A or !B)),
-        'Supuesto'(!A),
-        'I' or a(3, !B),
+        'Supuesto'(!(!FA or !FB)),
+        'Supuesto'(!FA),
+        'I' or a(3, !FB),
         'I' --> (3, 4),
         'MT'(5, 2),
         'E' ! (6),
-        'Supuesto'(!B),
-        'I' or b(!A, 8),
+        'Supuesto'(!FB),
+        'I' or b(!FA, 8),
         'I' --> (8, 9),
         'MT'(10, 2),
         'E' ! (11),
@@ -319,19 +333,79 @@ rule( 'Morgan And',
         'E' ! (15)
       ]).
 
-rule( 'Morgan Or',
-      [ !(A or B) ],
-      !A and !B,
+rule( 'Morgan And b',
+        [!FA and !FB],
+        !(FA or FB),
+        [ 'Premisa'(1),
+          'E' and a(1),
+          'E' and b(1),
+          'Supuesto'(FA or FB),
+          'Supuesto'(FA),
+          'I' and (5, 2),
+          'Supuesto'(!(c and !c)),
+          'I' --> (7, 6),
+          'I' ! (8),
+          'E' ! (9),
+          'I' --> (5, 10),
+          'Supuesto'(FB),
+          'I' and (12, 3),
+          'Supuesto'(!(c and !c)),
+          'I' --> (14, 13),
+          'I' ! (15),
+          'E' ! (16),
+          'I' --> (12, 17),
+          'E' or (4, 11, 18),
+          'I' --> (4, 19),
+          'I' ! (20)
+        ]).
+
+rule( 'Morgan Or a',
+      [ !(FA or FB) ],
+      !FA and !FB,
       [ 'Premisa'(1),
-        'Supuesto'(A),
-        'I' or a(2, B),
+        'Supuesto'(FA),
+        'I' or a(2, FB),
         'I' --> (2, 3),
-        'MT'(4, 1),
-        'Supuesto'(B),
-        'I' or b(A, 6),
-        'I' --> (6, 7),
-        'MT'(8, 1),
-        'I' and (5, 9)
+        'Supuesto'(FA),
+        'I' or a(5, FB),
+        'I' and (6, 1),
+        'I' --> (5,7),
+        'I' ! (8),
+        'Supuesto'(FB),
+        'I' or b(FA, 10),
+        'I' --> (10, 11),
+        'Supuesto'(FB),
+        'I' or b(FA, 13),
+        'I' and (14, 1),
+        'I' --> (13,15),
+        'I' ! (16),
+        'I' and (9,17)
+      ]).
+
+rule( 'Morgan Or b',
+      [ !FA or !FB ],
+      !(FA and FB),
+      [ 'Premisa'(1),
+        'Supuesto'(FA and FB),
+        'E' and a(2),
+        'E' and b(2),
+        'Supuesto'(!FA),
+        'I' and (3, 5),
+        'Supuesto'(!(c and !c)),
+        'I' --> (7, 6),
+        'I' ! (8),
+        'E' ! (9),
+        'I' --> (5, 10),
+        'Supuesto'(!FB),
+        'I' and (4, 12),
+        'Supuesto'(!(c and !c)),
+        'I' --> (14, 13),
+        'I' ! (15),
+        'E' ! (16),
+        'I' --> (12, 17),
+        'E' or (1, 11, 18),
+        'I' --> (2, 19),
+        'I' ! (20)
       ]).
 % Auxiliary predicates
 last_opened(A) :-
